@@ -47,7 +47,8 @@ var Typeahead = React.createClass({
       React.PropTypes.string,
       React.PropTypes.func
     ]),
-    customListComponent: React.PropTypes.func
+    customListComponent: React.PropTypes.func,
+    defaultClassNames: React.PropTypes.element
   },
 
   getDefaultProps: function() {
@@ -65,7 +66,8 @@ var Typeahead = React.createClass({
       onFocus: function(event) {},
       onBlur: function(event) {},
       filterOption: null,
-      customListComponent: TypeaheadSelector
+      customListComponent: TypeaheadSelector,
+      defaultClassNames: true
     };
   },
 
@@ -97,6 +99,10 @@ var Typeahead = React.createClass({
   setEntryText: function(value) {
     this.refs.entry.getDOMNode().value = value;
     this._onTextEntryUpdated();
+  },
+
+  focus: function(){
+    React.findDOMNode(this.refs.entry).focus()
   },
 
   _hasCustomValue: function() {
@@ -133,6 +139,7 @@ var Typeahead = React.createClass({
         customValue={this._getCustomValue()}
         customClasses={this.props.customClasses}
         selectionIndex={this.state.selectionIndex}
+        defaultClassNames={this.props.defaultClassNames}
         displayOption={this._generateOptionToStringFor(this.props.displayOption)} />
     );
   },
@@ -278,7 +285,7 @@ var Typeahead = React.createClass({
     var inputClassList = classNames(inputClasses);
 
     var classes = {
-      typeahead: true
+      typeahead: this.props.defaultClassNames
     };
     classes[this.props.className] = !!this.props.className;
     var classList = classNames(classes);

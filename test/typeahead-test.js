@@ -137,6 +137,20 @@ describe('Typeahead Component', function() {
       });
     });
 
+    describe('component functions', function() {
+      beforeEach(function() {
+        this.sinon = sinon.sandbox.create();
+      });
+      afterEach(function() {
+        this.sinon.restore();
+      });
+      it('focuses the typeahead', function() {
+        var node = React.findDOMNode(this.component.refs.entry);
+        this.sinon.spy(node, 'focus');
+        this.component.focus();
+        assert.equal(node.focus.calledOnce, true);
+      });
+    });
   });
 
   describe('props', function() {
@@ -355,6 +369,19 @@ describe('Typeahead Component', function() {
 
         var input = component.refs.entry;
         assert.equal(input.props.autoCorrect, 'off');
+      });
+    });
+
+    context('defaultClassNames', function() {
+      it('should remove default classNames when this prop is specified and false', function() {
+        var component = TestUtils.renderIntoDocument(<Typeahead
+          options={ BEATLES }
+          defaultClassNames={false}
+        />);
+        simulateTextInput(component, 'o');
+
+        assert.notOk(component.getDOMNode().classList.contains("typeahead"));
+        assert.notOk(component.refs.sel.getDOMNode().classList.contains("typeahead-selector"));
       });
     });
 
